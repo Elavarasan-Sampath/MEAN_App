@@ -15,16 +15,15 @@ export class MyTableComponent implements OnInit {
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['id', 'name','status'];
-  url: 'http://localhost:3000/api/contacts';
+  url= 'api/contacts';
   data:any;
   constructor(private http: HttpClient) {
-    
-    this.http.get(this.url).subscribe((res : any) => {
-      this.data = res;
-    });
   }
 
   ngOnInit() {
-    this.dataSource = new MyTableDataSource(this.paginator, this.sort);
+    this.http.get(this.url,{ observe: 'response' }).subscribe((res : any) => {
+      this.data = res.body;
+      this.dataSource = new MyTableDataSource(this.data,this.paginator, this.sort);
+    });
   }
 }
